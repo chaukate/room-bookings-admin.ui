@@ -8,7 +8,7 @@ import { msalInstance } from '@/shared/configurations/authConfig';
 
 const inter = Inter({ subsets: ['latin'] });
 
-localStorage.theme = 'light'
+// localStorage.theme = 'light'
 
 export const metadata = {
   title: 'Create Next App',
