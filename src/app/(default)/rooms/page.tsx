@@ -3,6 +3,10 @@
 import { useEffect, useState } from "react";
 import RoomService from "@/shared/services/room.service";
 import Form from "./components/Form";
+import { IRoomFormData } from "@/shared/models/rooms";
+import { Table } from "@/app/(default)/components/Table";
+import { FormModal } from "../components/Modals";
+import { ModalButton } from "../components/Buttons";
 
 const Room = () => {
     const [rooms, setData] = useState<any>();
@@ -17,27 +21,21 @@ const Room = () => {
         })();
     }, []);
 
-    const handleAdd = () => {
-        setShowForm(true);
-    };
+    const handleSubmit = async (formData: IRoomFormData) => {
+        console.log(">>>> formData", formData);
 
-    const handleCloseForm = () => {
-        setShowForm(false);
+        const response = await RoomService.create(formData);
+        formData.id = response.data;
     };
 
     return (
         <div>
             <h1>Rooms</h1>
-            <button onClick={handleAdd}>Add</button>
-            {showForm && <Form onClose={handleCloseForm} />}
-            {rooms ? (
-                <ul>
-                    {rooms.map((room: any) => (
-                        <li key={room.id}>{room.name}</li>
-                    ))}
-                </ul>) : (
-                <h2>Loading Records...</h2>
-            )}
+            <ModalButton showModal={() => setShowForm(true)}>Add</ModalButton>
+            {showForm ? (
+                <FormModal title="Save Room" hideModal={() => setShowForm(false)}><Form onSubmit={handleSubmit} onCancel={() => setShowForm(false)} /></FormModal>
+            ) : (<></>)}
+            <Table />
         </div >
     );
 };
