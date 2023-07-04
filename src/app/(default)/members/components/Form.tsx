@@ -3,7 +3,6 @@ import { useState } from "react";
 import { TextInput, TextAreaInput, NumberInput, BooleanInput } from "@/app/(default)/components/Inputs";
 import { CancelButton, SubmitButton } from "@/app/(default)/components/Buttons";
 import { IMemberFormData } from "../models/members";
-import { useForm, Controller } from "react-hook-form"
 
 type FormProps = {
     onSubmit: (formData: IMemberFormData) => void,

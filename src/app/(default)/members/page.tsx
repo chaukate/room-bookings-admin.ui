@@ -12,21 +12,31 @@ import { IMemberFormData } from "./models/members";
 const Member = () => {
     const [members, setMember] = useState<any>();
     const [showForm, setShowForm] = useState<boolean>(false);
+    const [listHeader, setListHeader] = useState<any>();
 
     useEffect(() => {
-        (async () => {
-            const response = await MemberService.list();
-            if (response?.status === 200) {
-                setMember(response.data);
-            }
-        })();
+        fetchData()
+        setListHeader([
+            {'Head': 'Name' ,'FieldName': 'name' },
+            {'Head': 'Email','FieldName': 'email'},
+            {'Head': 'Has Admin Access','FieldName': 'hasAccess'}
+        ]);
     }, []);
+
+    const fetchData =  (async () => {
+        const response = await MemberService.list();
+        if (response?.status === 200) {
+            setMember(response.data);
+        }
+    });
 
     const handleSubmit = async (formData: IMemberFormData) => {
         console.log(">>>> formData", formData);
 
         const response = await MemberService.create(formData);
         formData.id = response.data;
+        setShowForm(false);
+        fetchData();
     };
 
     return (
@@ -38,7 +48,7 @@ const Member = () => {
                     <Form onSubmit={handleSubmit} onCancel={() => setShowForm(false)} />
                 </FormModal>
             ) : (<></>)}
-            <Table />
+            <Table tableHeader={listHeader} tableBody={members}/>
         </div >
     );
 };
