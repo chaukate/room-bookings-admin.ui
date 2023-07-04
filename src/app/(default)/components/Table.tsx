@@ -3,8 +3,7 @@ interface ITableProps {
     body: string[]
 }
 
-export const Table = ({tableHeader , tableBody }: any) => {
-    console.log(tableBody,tableHeader)
+export const Table = ({tableHeader , tableBody , actionHandler, isActionEnable , handleAction}: any) => {
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -16,6 +15,9 @@ export const Table = ({tableHeader , tableBody }: any) => {
                             {item.Head}
                         </th>
                         )}
+                        {
+                            isActionEnable ? <th>Action</th> : <></>
+                        }
                     </tr>
                 </thead>
                 <tbody>
@@ -27,6 +29,23 @@ export const Table = ({tableHeader , tableBody }: any) => {
                                 {body[item.FieldName]}
                             </td>
                         )}
+                        {
+                            isActionEnable ?  
+                            <td className="px-6 py-4">
+                            {
+                                actionHandler?.map((action: any,i: number)=> 
+                                <button key={i}
+                                className={action.className}
+                                onClick={(e) => handleAction(body,action.title)}
+                            >
+                                {action.title}
+                            </button>
+                                )
+                            }
+                            </td> : <></>
+                        }
+                        
+                       
                     </tr>
                     )}
                 </tbody>
