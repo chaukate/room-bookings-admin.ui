@@ -11,21 +11,29 @@ import { ModalButton } from "../components/Buttons";
 const Room = () => {
     const [rooms, setData] = useState<any>();
     const [showForm, setShowForm] = useState<boolean>(false);
-
+    const [listHeader, setListHeader] = useState<any>();
     useEffect(() => {
-        (async () => {
-            const response = await RoomService.list();
-            if (response?.status === 200) {
-                setData(response.data);
-            }
-        })();
+        fetchData();
+        setListHeader([
+            {'Head': 'Name' ,'FieldName': 'name' },
+            {'Head': 'Updated At','FieldName': 'lastUpdatedAt'}
+        ]);
     }, []);
+
+    const fetchData = (async () => {
+        const response = await RoomService.list();
+        if (response?.status === 200) {
+            setData(response.data);
+        }
+    });
 
     const handleSubmit = async (formData: IRoomFormData) => {
         console.log(">>>> formData", formData);
 
         const response = await RoomService.create(formData);
         formData.id = response.data;
+        setShowForm(false);
+        fetchData();
     };
 
     return (
@@ -37,7 +45,7 @@ const Room = () => {
                     <Form onSubmit={handleSubmit} onCancel={() => setShowForm(false)} />
                 </FormModal>
             ) : (<></>)}
-            <Table />
+            <Table tableHeader={listHeader} tableBody={rooms}/>
         </div >
     );
 };
