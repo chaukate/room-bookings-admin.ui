@@ -33,7 +33,9 @@ const Room = () => {
             <h1>Rooms</h1>
             <ModalButton showModal={() => setShowForm(true)}>Add</ModalButton>
             {showForm ? (
-                <FormModal title="Save Room" hideModal={() => setShowForm(false)}><Form onSubmit={handleSubmit} onCancel={() => setShowForm(false)} /></FormModal>
+                <FormModal title="Save Room" hideModal={() => setShowForm(false)}>
+                    <Form onSubmit={handleSubmit} onCancel={() => setShowForm(false)} />
+                </FormModal>
             ) : (<></>)}
             <Table />
         </div >
