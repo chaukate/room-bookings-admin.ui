@@ -56,7 +56,6 @@ const Room = () => {
             setShowForm(true);
             setShowUpdate(true);
             setUpdateId(formDetail.id);
-            console.log(formDetail)
             setFormData({
                 name: formDetail.name,
                 description: formDetail.description,
