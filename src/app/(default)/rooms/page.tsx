@@ -8,6 +8,12 @@ import { Table } from "@/app/(default)/components/Table";
 import { FormModal } from "../components/Modals";
 import { ModalButton } from "../components/Buttons";
 
+const defaultFormData = {
+    name: "",
+    description: "",
+    capacity: 0
+}
+
 const Room = () => {
     const [rooms, setData] = useState<any>();
     const [showForm, setShowForm] = useState<boolean>(false);
@@ -15,6 +21,7 @@ const Room = () => {
     const [actionHandler,setActionHandler] = useState<any>();
     const [showUpdate, setShowUpdate] = useState<boolean>(false);
     const [updateId, setUpdateId] = useState<number>(0);
+    const [formData, setFormData] = useState<IRoomFormData>(defaultFormData);
 
     useEffect(() => {
         fetchData();
@@ -35,10 +42,13 @@ const Room = () => {
 
     const handleSubmit = async (formData: IRoomFormData) => {
 
-        const response = await RoomService.create(formData);
-        formData.id = response.data;
-        setShowForm(false);
-        fetchData();
+        const response = await RoomService.saveRooms(formData,updateId);
+        if(response.status === 200){
+            formData.id = response.data;
+            hideModal()
+            fetchData();
+            setFormData(defaultFormData)
+        }      
     };
 
     const handleAction = (formDetail : any,title: any) => {
@@ -46,11 +56,11 @@ const Room = () => {
             setShowForm(true);
             setShowUpdate(true);
             setUpdateId(formDetail.id);
-            // setFormData({
-            //     name: formDetail.name,
-            //     email: formDetail.email,
-            //     hasAccess: formDetail.hasAccess
-            // })
+            setFormData({
+                name: formDetail.name,
+                description: formDetail.description,
+                capacity: formDetail.capacity
+            })
         }
     }
 
@@ -61,7 +71,7 @@ const Room = () => {
 
     const openModal = () => {
         setShowForm(true)
-        // setFormData(defaultFormData)
+        setFormData(defaultFormData)
     }
 
     return (
@@ -70,7 +80,7 @@ const Room = () => {
             <ModalButton showModal={openModal}>Add</ModalButton>
             {showForm ? (
                 <FormModal title={showUpdate ? 'Update Room' : 'Save Room'} hideModal={hideModal}>
-                    <Form onSubmit={handleSubmit} onCancel={hideModal} />
+                    <Form onSubmit={handleSubmit} onCancel={hideModal} formData={formData} setFormData={setFormData} />
                 </FormModal>
             ) : (<></>)}
             <Table tableHeader={listHeader} tableBody={rooms} actionHandler={actionHandler} isActionEnable={true} handleAction={handleAction}/>
