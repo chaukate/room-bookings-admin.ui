@@ -1,18 +1,19 @@
-"use client"
-import { useState } from "react";
-import { TextInput, TextAreaInput, NumberInput, BooleanInput } from "@/app/(default)/components/Inputs";
+import { useEffect, useState } from "react";
+import { TextInput, TextAreaInput, NumberInput, InputSelect } from "@/app/(default)/components/Inputs";
 import { CancelButton, SubmitButton } from "@/app/(default)/components/Buttons";
-import { IMemberFormData } from "../models/members";
+import { ITeamFormData } from "@/shared/models/teams";
+import MemberService from "@/shared/services/member.service";
 
 type FormProps = {
-    onSubmit: (formData: IMemberFormData) => void,
+    onSubmit: (formData: ITeamFormData) => void,
     onCancel: () => void
     setFormData: any,
     formData: any
 };
 
-
 const Form: React.FC<FormProps> = ({ onSubmit, onCancel, formData, setFormData }) => {
+    // const [formData, setFormData] = useState<ITeamFormData>(defaultFormData);
+    const [leadData, setLeadData] = useState<any>();
 
     const handleInputChange = (event: React.FormEvent<HTMLInputElement>) => {
         const newFormData = {
@@ -21,11 +22,19 @@ const Form: React.FC<FormProps> = ({ onSubmit, onCancel, formData, setFormData }
         };
         setFormData(newFormData);
     }
+    useEffect(()=>{      
+        (async () => {
+            const response = await MemberService.list();
+            if (response?.status === 200) {
+                setLeadData(response.data);
+            }
+        })()
+    },[]) 
 
-    const handleBooleanChange = (event: React.ChangeEvent<HTMLSelectElement>) => {        
+    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const newFormData = {
             ...formData,
-            [event.target.name]: !formData.hasAccess
+            [event.target.name]: +event.target.value
         };
         setFormData(newFormData);
     }
@@ -45,14 +54,14 @@ const Form: React.FC<FormProps> = ({ onSubmit, onCancel, formData, setFormData }
                                 onChange={handleInputChange}
                                 value={formData.name}
                                 label="Name" />
-                            <TextInput name="email"
+                            <TextAreaInput name="description"
                                 onChange={handleInputChange}
-                                value={formData.email}
-                                label="Email" />
-                            <BooleanInput name="hasAccess"
-                                onChange={handleBooleanChange}
-                                value={formData.hasAccess}
-                                label="Has System Access" />
+                                value={formData.description}
+                                label="Description" />
+                            <InputSelect name="leadId" 
+                            onChange={handleSelectChange} label="lead" 
+                            value={leadData}
+                            selectedValue={formData.leadId}/>
                         </div>
                     </div>
                 </div>

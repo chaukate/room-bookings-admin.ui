@@ -8,16 +8,12 @@ import { CancelButton, SubmitButton } from "@/app/(default)/components/Buttons";
 type FormProps = {
     onSubmit: (formData: IRoomFormData) => void,
     onCancel: () => void
+    setFormData: any,
+    formData: any
 };
 
-const defaultFormData = {
-    name: "",
-    description: "",
-    capacity: 0
-}
 
-const Form: React.FC<FormProps> = ({ onSubmit, onCancel }) => {
-    const [formData, setFormData] = useState<IRoomFormData>(defaultFormData);
+const Form: React.FC<FormProps> = ({ onSubmit, onCancel , formData, setFormData }) => {
 
     const handleInputChange = (event: React.FormEvent<HTMLInputElement>) => {
         const newFormData = {
