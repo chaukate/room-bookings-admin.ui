@@ -28,7 +28,6 @@ const Room = () => {
     });
 
     const handleSubmit = async (formData: IRoomFormData) => {
-        console.log(">>>> formData", formData);
 
         const response = await RoomService.create(formData);
         formData.id = response.data;

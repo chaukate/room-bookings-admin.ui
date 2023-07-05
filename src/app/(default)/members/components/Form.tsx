@@ -7,16 +7,12 @@ import { IMemberFormData } from "../models/members";
 type FormProps = {
     onSubmit: (formData: IMemberFormData) => void,
     onCancel: () => void
+    setFormData: any,
+    formData: any
 };
 
-const defaultFormData = {
-    name: "",
-    email: "",
-    hasAccess: false
-}
 
-const Form: React.FC<FormProps> = ({ onSubmit, onCancel }) => {
-    const [formData, setFormData] = useState<IMemberFormData>(defaultFormData);
+const Form: React.FC<FormProps> = ({ onSubmit, onCancel, formData, setFormData }) => {
 
     const handleInputChange = (event: React.FormEvent<HTMLInputElement>) => {
         const newFormData = {
