@@ -52,7 +52,6 @@ const Member = () => {
     };
 
     const handleAction = (formDetail : any,title: any) => {
-        console.log(">>>> formDetail edit", formDetail,title);
         if(title === 'Edit'){
             setShowForm(true);
             setShowUpdate(true);
