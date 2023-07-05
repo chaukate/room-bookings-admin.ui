@@ -66,6 +66,7 @@ export const BooleanInput: React.FC<IInput> = ({ name, onChange, value, label })
                     id={name}
                     autoComplete={name}
                     onChange={onChange}
+                    checked={value}
                     value={value} />
             </div>
         </div>

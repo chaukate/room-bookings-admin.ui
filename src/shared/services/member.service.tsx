@@ -11,14 +11,24 @@ class MemberService {
             });
     }
 
-    create(request: any) {
-        return Api.post("/members", request)
-            .then(response => {
+    saveMember(request: any,id : number = 0) {
+        let api;
+        if(id > 0){
+            api = Api.put(`/members/${id}`, request)
+        }
+        else {
+            api = Api.post("/members", request)
+        }
+        return api.then(response => {
                 return response;
             })
             .catch(error => {
                 return error.response;
-            });
+        });
+    }
+
+    update(request: any,id: any) {
+       
     }
 }
 
