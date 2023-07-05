@@ -10,16 +10,22 @@ class RoomService {
                 return error.response;
             });
     }
-
-    create(request: any) {
-        return Api.post("/rooms", request)
-            .then(response => {
+    saveRooms(request: any,id : number = 0) {
+        let api;
+        if(id > 0){
+            api = Api.put(`/rooms/${id}`, request)
+        }
+        else {
+            api = Api.post("/rooms", request)
+        }
+        return api.then(response => {
                 return response;
             })
             .catch(error => {
                 return error.response;
-            });
+        });
     }
+
 }
 
 export default new RoomService();

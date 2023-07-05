@@ -26,10 +26,6 @@ class MemberService {
                 return error.response;
         });
     }
-
-    update(request: any,id: any) {
-       
-    }
 }
 
 export default new MemberService();
