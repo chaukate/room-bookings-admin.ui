@@ -67,11 +67,14 @@ const Room = () => {
     const hideModal = () => {
         setShowForm(false) 
         setShowUpdate(false)
+        setUpdateId(0);
+        setFormData(defaultFormData)
     }
 
     const openModal = () => {
         setShowForm(true)
         setFormData(defaultFormData)
+        setUpdateId(0);
     }
 
     return (

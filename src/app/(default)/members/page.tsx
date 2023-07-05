@@ -67,9 +67,12 @@ const Member = () => {
    const hideModal = () => {
         setShowForm(false) 
         setShowUpdate(false)
+        setUpdateId(0);
+        setFormData(defaultFormData)
     }
 
     const openModal = () => {
+        setUpdateId(0);
         setShowForm(true)
         setFormData(defaultFormData)
     }
