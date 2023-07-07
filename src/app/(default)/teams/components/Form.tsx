@@ -8,10 +8,12 @@ type FormProps = {
     onSubmit: (formData: ITeamFormData) => void,
     onCancel: () => void
     setFormData: any,
-    formData: any
+    formData: any,
+    error: any,
+    setErrors: any
 };
 
-const Form: React.FC<FormProps> = ({ onSubmit, onCancel, formData, setFormData }) => {
+const Form: React.FC<FormProps> = ({ onSubmit, onCancel, formData, setFormData, error, setErrors }) => {
     // const [formData, setFormData] = useState<ITeamFormData>(defaultFormData);
     const [leadData, setLeadData] = useState<any>();
 
@@ -19,9 +21,22 @@ const Form: React.FC<FormProps> = ({ onSubmit, onCancel, formData, setFormData }
         const newFormData = {
             ...formData,
             [event.currentTarget.name]: event.currentTarget.value
-        };
+        }; 
+        filterError(event.currentTarget.name);
         setFormData(newFormData);
     }
+    const filterError = (name: string) => {              
+        const filterError =  (Object.entries(error).map(([key, value]) => ({
+            key,
+            value,
+          }))).filter(x => x.key !== name);
+        setErrors(filterError.reduce((acc: any, { key, value }) => {
+                acc[key] = value;
+                return acc;
+                }, {})
+        );
+    }
+
     useEffect(()=>{      
         (async () => {
             const response = await MemberService.list();
@@ -36,6 +51,7 @@ const Form: React.FC<FormProps> = ({ onSubmit, onCancel, formData, setFormData }
             ...formData,
             [event.target.name]: +event.target.value
         };
+        filterError(event.target.name);
         setFormData(newFormData);
     }
 
@@ -54,14 +70,18 @@ const Form: React.FC<FormProps> = ({ onSubmit, onCancel, formData, setFormData }
                                 onChange={handleInputChange}
                                 value={formData.name}
                                 label="Name" />
+                                {error.name && <div className="block text-sm font-medium leading-6 text-gray-900">{error.name}</div>}
+
                             <TextAreaInput name="description"
                                 onChange={handleInputChange}
                                 value={formData.description}
                                 label="Description" />
+                                 {error.description && <p className="block text-sm font-medium leading-6 text-gray-900">{error.description}</p>}
                             <InputSelect name="leadId" 
                             onChange={handleSelectChange} label="lead" 
                             value={leadData}
                             selectedValue={formData.leadId}/>
+                             {error.leadId && <div className="block text-sm font-medium leading-6 text-gray-900">{error.leadId}</div>}
                         </div>
                     </div>
                 </div>
