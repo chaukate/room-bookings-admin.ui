@@ -14,11 +14,12 @@ export const FormInput = <TFormValues extends Record<string, unknown>>({
   name,
   register,
   rules,
+  formState,
   ...props
 }: FormInputProps<TFormValues>): JSX.Element => {
   return (
     <>
-          <Input name={name} {...props} {...(register && register(name, rules))}/>
+          <Input name={name} {...props} {...(register && register(name, rules))} formState = {formState}/>
     </>
   );
 };

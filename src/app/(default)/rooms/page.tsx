@@ -42,7 +42,6 @@ const Room = () => {
     });
 
     const onHandleSubmit = async (formData: IRoomFormData) => {
-
         const response = await RoomService.saveRooms(formData,updateId);
         if(response.status === 200){
             formData.id = response.data;
@@ -57,6 +56,8 @@ const Room = () => {
             setShowForm(true);
             setShowUpdate(true);
             setUpdateId(formDetail.id);
+
+            //pass to children function
             setFormData({
                 name: formDetail.name,
                 description: formDetail.description,
@@ -84,7 +85,7 @@ const Room = () => {
             <ModalButton showModal={openModal}>Add</ModalButton>
             {showForm ? (
                 <FormModal title={showUpdate ? 'Update Room' : 'Save Room'} hideModal={hideModal}>
-                    <Form onSubmit={onHandleSubmit} onCancel={hideModal} />
+                    <Form onSubmit={onHandleSubmit} onCancel={hideModal} setValueOnForm={formData}/>
                 </FormModal>
             ) : (<></>)}
             <Table tableHeader={listHeader} tableBody={rooms} actionHandler={actionHandler} isActionEnable={true} handleAction={handleAction}/>

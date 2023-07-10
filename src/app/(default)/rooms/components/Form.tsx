@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   TextInput,
   TextAreaInput,
@@ -14,39 +14,33 @@ import { FormInput } from "@/shared/components/form-component/form-input";
 type FormProps = {
   onSubmit: (formData: IRoomFormData) => void;
   onCancel: () => void;
+  setValueOnForm : any;
 };
 
-export type RoomFormFields = {
-  name?: string;
-  description: string;
-  capacity: number;
-};
-const Form: React.FC<FormProps> = ({ onSubmit, onCancel }) => {
+const Form: React.FC<FormProps> = ({ onSubmit, onCancel,setValueOnForm }) => {
 const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RoomFormFields>();
-  const handleInputChange = (event: React.FormEvent<HTMLInputElement>) => {
-    // const newFormData = {
-    //     ...formData,
-    //     [event.currentTarget.name]: event.currentTarget.value
-    // };
-    // setFormData(newFormData);
-  };
-
-  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    // const newFormData = {
-    //     ...formData,
-    //     [event.target.name]: event.target.value
-    // };
-    // setFormData(newFormData);
-  };
+    setValue
+  } = useForm<IRoomFormData>();
 
   const onHandleSubmit = (data: any) => {
-    console.log(data);
-    // onSubmit(formData)
+    onSubmit(data)
   };
+
+  useEffect(()=> {
+      setValue('name',setValueOnForm.name)
+      setValue('description',setValueOnForm.description)
+      setValue('capacity',setValueOnForm.capacity)
+  },[setValueOnForm])
+  // const setValueOnForm = (data: IRoomFormData) => {
+  //   setValue('name',data.name)
+  //   setValue('description',data.description)
+  //   setValue('capacity',data.capacity)
+  // }
+  
+
 
   return (
     <div>
@@ -61,7 +55,7 @@ const {
                 label="Name"
                 placeholder="Name"
                 register={register}
-                formState = {errors}
+                formState = {errors.name}
                 rules={{  required: true }}
               />
               <FormInput
@@ -71,6 +65,7 @@ const {
                 label="Description"
                 placeholder="Description"
                 register={register}
+                formState = {errors.description}
                 rules={{ required: true }}
               />
               <FormInput
@@ -80,6 +75,7 @@ const {
                 label="Capacity"
                 placeholder="Capacity"
                 register={register}
+                formState = {errors.capacity}
                 rules={{ required: true }}
               />
             </div>
