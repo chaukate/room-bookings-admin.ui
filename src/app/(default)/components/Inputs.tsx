@@ -1,3 +1,5 @@
+import { RegisterOptions, UseFormRegister, Path } from 'react-hook-form';
+
 interface IInput {
     name: string,
     onChange?: any,

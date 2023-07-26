@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react";
-import RoomService from "@/shared/services/room.service";
 import { ITeamFormData } from "@/shared/models/teams";
 import { ModalButton } from "../components/Buttons";
 import { FormModal } from "../components/Modals";
@@ -24,6 +23,7 @@ const Teams = () => {
     const [showUpdate, setShowUpdate] = useState<boolean>(false);
     const [formData, setFormData] = useState<ITeamFormData>(defaultFormData);
     const [updateId, setUpdateId] = useState<number>(0);
+    const [errors, setErrors] = useState({});
 
       useEffect(() => {
         fetchData()
@@ -37,13 +37,29 @@ const Teams = () => {
     }, []);
 
     const handleSubmit = async (formData: ITeamFormData) => {
-        const response = await TeamService.saveTeams(formData, updateId);
-        if(response.status === 200){
-          formData.id = response.data;
-          hideModal()
-          fetchData();
-          setFormData(defaultFormData)
-      }     
+      const validationErrors: any = {};
+
+      if (!formData.name.trim()) {
+        validationErrors.name = 'Name is required';
+      }
+      if (!formData.description.trim()) {
+        validationErrors.description = 'Description is required';
+      }
+      if (formData.leadId === 0) {
+        validationErrors.leadId = 'Lead is required';
+      }
+
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+      } else {
+          const response = await TeamService.saveTeams(formData, updateId);
+          if(response.status === 200){
+            formData.id = response.data;
+            hideModal()
+            fetchData();
+            setFormData(defaultFormData)
+       }   
+      }    
     };
 
     const fetchData = async () => {
@@ -82,6 +98,7 @@ const Teams = () => {
   const openModal = () => {
     setShowForm(true)
     setUpdateId(0);
+    setErrors({});
     setFormData(defaultFormData);
 }
 
@@ -91,7 +108,7 @@ const Teams = () => {
             <ModalButton showModal={openModal}>Add Team</ModalButton>
             {showForm ? (
                 <FormModal title={showUpdate ? 'Update Team' : 'Save Team'} hideModal={hideModal}>
-                    <Form onSubmit={handleSubmit} onCancel={hideModal}  formData={formData} setFormData={setFormData}  />
+                    <Form onSubmit={handleSubmit} onCancel={hideModal} error={errors} setErrors={setErrors} formData={formData} setFormData={setFormData}  />
                 </FormModal>
             ) : (<></>)}
             <Table tableHeader={listHeader} tableBody={teams} 

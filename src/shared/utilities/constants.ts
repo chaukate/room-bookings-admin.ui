@@ -5,5 +5,5 @@ export const URL = {
     DASHBOARD: "/",
     ROOMS: "/rooms",
     TEAMS: "/teams",
-    "MEMBERS": "/members"
+    MEMBERS: "/members"
 };
