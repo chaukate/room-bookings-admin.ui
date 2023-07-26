@@ -5,6 +5,7 @@ import { Inter } from 'next/font/google'
 import AuthProvider from '@/shared/providers/AuthProvider'
 import { AuthenticationResult, EventMessage, EventType } from "@azure/msal-browser";
 import { msalInstance } from '@/shared/configurations/authConfig';
+import StyledComponentsRegistry from '@/shared/libraries/AntdRegistry';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -42,7 +43,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AuthProvider>
-          {children}
+          <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
         </AuthProvider>
       </body>
     </html>
