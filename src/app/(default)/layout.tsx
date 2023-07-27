@@ -4,6 +4,12 @@ import { useIsAuthenticated } from "@azure/msal-react";
 import { useEffect, useState } from 'react';
 import { redirect } from "next/navigation";
 
+import { Layout, theme } from 'antd';
+import { Alert, Spin } from 'antd';
+import { SideBar } from "./components/SideBar";
+
+const { Header, Content, Footer, Sider } = Layout;
+
 export default function PageLayout({
     children,
 }: {
@@ -11,6 +17,10 @@ export default function PageLayout({
 }) {
     const isAuthenticated = useIsAuthenticated();
     const [isAuthenticating, setIsAuthenticating] = useState<boolean>(true);
+
+    const {
+        token: { colorBgContainer },
+    } = theme.useToken();
 
     useEffect(() => {
         setTimeout(() => {
@@ -25,19 +35,33 @@ export default function PageLayout({
     }, [isAuthenticating, isAuthenticated]);
 
     if (isAuthenticating) {
-        return <h1>Authenticating...</h1>
+        return (
+            <Spin spinning={isAuthenticating} delay={500}>
+                <Alert
+                    message="Authenticating"
+                    description="Checking user identity."
+                    type="info"
+                />
+            </Spin>
+        )
     }
 
     return (
-        <main className="grow flex">
-            <aside className="w-[200px] bg-slate-600">
-                {/* <div className="text-md md:text-lg font-black mb-3 p-5 border-b-1 border-blue-900"> */}
-                <div className="p-5 bg-gray-800 text-md md:text-lg font-black">
-                    APP NAME
-                </div>
-            </aside>
-
-            <div className="flex-1 p-5">{children}</div>
-        </main>
+        <Layout style={{ minHeight: '100vh' }}>
+            <SideBar />
+            <Layout>
+                {/* <Header style={{ padding: 0, background: colorBgContainer }} /> */}
+                <Content style={{ margin: '0 16px' }}>
+                    {/* <Breadcrumb style={{ margin: '16px 0' }}>
+                        <Breadcrumb.Item>User</Breadcrumb.Item>
+                        <Breadcrumb.Item>Bill</Breadcrumb.Item>
+                    </Breadcrumb> */}
+                    <div style={{ padding: 24, minHeight: 360, background: colorBgContainer }}>
+                        {children}
+                    </div>
+                </Content>
+                {/* <Footer style={{ textAlign: 'center' }}>Room Booking ©2023 Devfinity</Footer> */}
+            </Layout>
+        </Layout>
     )
 }
