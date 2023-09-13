@@ -22,7 +22,7 @@ console.log(">>> authConfig", authConfig)
 // Add here scopes for id token to be used at MS Identity Platform endpoints.
 export const loginRequest: RedirectRequest = {
     scopes: [
-        "api://cbd22088-d1f4-4c71-b89a-b312db4fda78/admin_auth",
+        "api://df837e8f-9bd1-40df-84c4-dbb2426d96df/admin_access",
         "profile",
         "openid",
         "user.read"

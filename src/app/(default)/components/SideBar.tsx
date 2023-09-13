@@ -24,6 +24,11 @@ export const SideBar: React.FC = () => {
                         Dashboard
                     </Menu.Item>
                 </Link>
+                <Link href="/clients">
+                    <Menu.Item key="/clients" icon={<DesktopOutlined />}>
+                        Clients
+                    </Menu.Item>
+                </Link>
                 <Link href="/rooms">
                     <Menu.Item key="/rooms" icon={<DesktopOutlined />}>
                         Rooms
