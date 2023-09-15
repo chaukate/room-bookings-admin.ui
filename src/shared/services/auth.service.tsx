@@ -29,6 +29,7 @@ class AuthService {
         return msalInstance
             .acquireTokenSilent(loginRequest)
             .then((response) => {
+                console.log("Authentication >>>", response);
                 return response;
             })
             .catch((err) => {

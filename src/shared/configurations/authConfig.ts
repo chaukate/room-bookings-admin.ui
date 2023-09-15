@@ -22,12 +22,14 @@ console.log(">>> authConfig", authConfig)
 // Add here scopes for id token to be used at MS Identity Platform endpoints.
 export const loginRequest: RedirectRequest = {
     scopes: [
-        "api://df837e8f-9bd1-40df-84c4-dbb2426d96df/admin_access",
+        `${process.env.NEXT_PUBLIC_AZURE_AD_APP_AUTH_SCOPE}`,
         "profile",
         "openid",
         "user.read"
     ]
 };
+
+console.log(">>> Scopes", loginRequest);
 
 // Add here the endpoints for MS Graph API services you would like to use.
 export const graphConfig = {
